@@ -3,3 +3,5 @@
 + task2 --> Add first instance
 # Day 2
 + networking --> vpc,subnet,internet gateway,route table,nat gateway,route table association,eip
+# Day 3
++ Use count and length
