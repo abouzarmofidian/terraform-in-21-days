@@ -1,6 +1,21 @@
+data "aws_ami" "amazonlinux" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-kernel-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+}
+
 #Public instance
 resource "aws_instance" "public" {
-  ami                         = "ami-679593333241"
+  ami                         = data.aws_ami.amazonlinux.id
   associate_public_ip_address = true
   instance_type               = "t2.micro"
   key_name                    = "main"
@@ -39,7 +54,7 @@ resource "aws_security_group" "public" {
 
 #Private instance
 resource "aws_instance" "private" {
-  ami                    = "ami-679593333241"
+  ami                    = data.aws_ami.amazonlinux.id
   instance_type          = "t2.micro"
   key_name               = "main"
   vpc_security_group_ids = [aws_security_group.private.id]
