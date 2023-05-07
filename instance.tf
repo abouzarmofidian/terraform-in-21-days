@@ -1,3 +1,4 @@
+#Public instance
 resource "aws_instance" "public" {
   ami                         = "ami-679593333241"
   associate_public_ip_address = true
@@ -33,5 +34,44 @@ resource "aws_security_group" "public" {
 
   tags = {
     Name = "${var.env}-public"
+  }
+}
+
+#Private instance
+resource "aws_instance" "private" {
+  ami                    = "ami-679593333241"
+  instance_type          = "t2.micro"
+  key_name               = "main"
+  vpc_security_group_ids = [aws_security_group.private.id]
+  subnet_id              = aws_subnet.private[0].id
+
+  tags = {
+    Name = "${var.env}-private"
+  }
+}
+
+
+resource "aws_security_group" "private" {
+  name              = "${var.env}-private"
+  descridescription = "Allow VPC terrafic"
+  vpc_id            = aws_vpc.vpc.id
+
+  ingress {
+    description = "SSH from VPC"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.env}-private"
   }
 }
