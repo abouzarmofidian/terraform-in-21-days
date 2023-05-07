@@ -9,3 +9,4 @@
 # Day 4
 + Add public and private Ec2 instance
 + Add Security Group 
++ Use data source
