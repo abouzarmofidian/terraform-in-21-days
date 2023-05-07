@@ -7,5 +7,5 @@
 + Use count and length
 + Use variables
 # Day 4
-+ Add Ec2 instance
++ Add public and private Ec2 instance
 + Add Security Group 
