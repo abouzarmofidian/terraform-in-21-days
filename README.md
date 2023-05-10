@@ -12,4 +12,5 @@
 + Use data source
 # Day 5
 + Use User Data 
-+ check log in this directory --> /var/log/cloud-init-output.log
++ Check log in this directory --> /var/log/cloud-init-output.log
++ Run 2048 game using user data
