@@ -10,3 +10,6 @@
 + Add public and private Ec2 instance
 + Add Security Group 
 + Use data source
+# Day 5
++ Use User Data 
++ check log in this directory --> /var/log/cloud-init-output.log
