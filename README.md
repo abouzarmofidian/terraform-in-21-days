@@ -14,3 +14,5 @@
 + Use User Data 
 + Check log in this directory --> /var/log/cloud-init-output.log
 + Run 2048 game using user data
+# Day 6
++ Configure remote state
