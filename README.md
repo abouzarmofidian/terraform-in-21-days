@@ -16,3 +16,8 @@
 + Run 2048 game using user data
 # Day 6
 + Configure remote state
+# Day 7
++ Split infrastructure unto multiple states
++ level0 --> Create S3 and Dynamodb table
++ level1 --> Networking --> VPC,SUbnet,Internet GW,Route table,Nat GW,EIP
++ level2 --> AWS Instance --> EC2,Security Group
