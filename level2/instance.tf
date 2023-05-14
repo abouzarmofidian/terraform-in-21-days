@@ -20,7 +20,7 @@ resource "aws_instance" "public" {
   instance_type               = "t2.micro"
   key_name                    = "main"
   vpc_security_group_ids      = [aws_security_group.public.id]
-  subnet_id                   = aws_subnet.public[0].id
+  subnet_id                   = data.terraform_remote_state.level1.outputs.public_subnet_id[0]
   user_data                   = file("user-data.sh")
 
   tags = {
@@ -31,7 +31,7 @@ resource "aws_instance" "public" {
 resource "aws_security_group" "public" {
   name              = "${var.env}-public"
   descridescription = "Allow inbound terrafic"
-  vpc_id            = aws_vpc.vpc.id
+  vpc_id            = data.terraform_remote_state.level1.outputs.vpc_id
 
   ingress {
     description = "SSH from public"
@@ -67,7 +67,7 @@ resource "aws_instance" "private" {
   instance_type          = "t2.micro"
   key_name               = "main"
   vpc_security_group_ids = [aws_security_group.private.id]
-  subnet_id              = aws_subnet.private[0].id
+  subnet_id              = data.terraform_remote_state.level1.outputs.private_subnet_id[0]
 
   tags = {
     Name = "${var.env}-private"
@@ -78,14 +78,14 @@ resource "aws_instance" "private" {
 resource "aws_security_group" "private" {
   name              = "${var.env}-private"
   descridescription = "Allow VPC terrafic"
-  vpc_id            = aws_vpc.vpc.id
+  vpc_id            = data.terraform_remote_state.level1.outputs.vpc_id
 
   ingress {
     description = "SSH from VPC"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.vpc_cidr]
+    cidr_blocks = [data.terraform_remote_state.level1.outputs.vpc_cidr]
   }
 
   egress {
