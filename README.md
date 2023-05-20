@@ -23,3 +23,5 @@
 + level2 --> AWS Instance --> EC2,Security Group
 # Day 8
 + Load balancer
+# Day 9
++ Auto scaling group
