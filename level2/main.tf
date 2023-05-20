@@ -15,13 +15,15 @@ data "aws_ami" "amazonlinux" {
 
 #Public instance
 resource "aws_instance" "public" {
+  count = 2
+
   ami                         = data.aws_ami.amazonlinux.id
   associate_public_ip_address = true
   instance_type               = "t2.micro"
   key_name                    = "main"
   vpc_security_group_ids      = [aws_security_group.public.id]
-  subnet_id                   = data.terraform_remote_state.level1.outputs.public_subnet_id[0]
-  user_data                   = file("user-data.sh")
+  subnet_id                   = data.terraform_remote_state.level1.outputs.public_subnet_id[count.index]
+
 
   tags = {
     Name = "${var.env}-public"
@@ -42,7 +44,15 @@ resource "aws_security_group" "public" {
   }
 
   ingress {
-    description = "HTTP from public"
+    description     = "HTTP from public"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [aws_security_group.load_balancer.id]
+  }
+
+  ingress {
+    description = "HTTP from load balancer"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -63,11 +73,14 @@ resource "aws_security_group" "public" {
 
 #Private instance
 resource "aws_instance" "private" {
+  count = 2
+
   ami                    = data.aws_ami.amazonlinux.id
   instance_type          = "t2.micro"
   key_name               = "main"
   vpc_security_group_ids = [aws_security_group.private.id]
-  subnet_id              = data.terraform_remote_state.level1.outputs.private_subnet_id[0]
+  subnet_id              = data.terraform_remote_state.level1.outputs.private_subnet_id[count.index]
+  user_data              = file("user-data.sh")
 
   tags = {
     Name = "${var.env}-private"
@@ -86,6 +99,14 @@ resource "aws_security_group" "private" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = [data.terraform_remote_state.level1.outputs.vpc_cidr]
+  }
+
+  ingress {
+    description     = "HTTP from load balancer"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [aws_security_group.load_balancer.id]
   }
 
   egress {
