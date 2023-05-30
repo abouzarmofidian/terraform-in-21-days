@@ -25,3 +25,5 @@
 + Load balancer
 # Day 9
 + Auto scaling group
+# Day 10
++ Module
